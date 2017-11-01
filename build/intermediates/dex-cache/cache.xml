@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\exploded-aar\com.android.support\support-v4\25.3.1\jars\classes.jar"
+        jumboMode="false"
+        revision="25.0.3"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\pre-dexed\debug\classes-b2c9b1d3128c0bc36c952351f624892400e92ca0.jar" />
+    </item>
+    <item
+        jar="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\25.3.1\jars\classes.jar"
+        jumboMode="false"
+        revision="25.0.3"
+        sha1="6ef31f1555bb4cc513ec8d52711365a8b89f3600">
+        <dex dex="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\pre-dexed\debug\classes-10e0a6aca34cb13eef06168ce000168848929d7d.jar" />
+    </item>
+    <item
+        jar="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\25.3.1\jars\classes.jar"
+        jumboMode="false"
+        revision="25.0.3"
+        sha1="150252b33b00274cc868578ade018fda0d43a3eb">
+        <dex dex="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\pre-dexed\debug\classes-9f94554d0d582ecedf3a6395ab28ba3b047447ad.jar" />
+    </item>
+    <item
+        jar="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\25.3.1\jars\classes.jar"
+        jumboMode="false"
+        revision="25.0.3"
+        sha1="052f5f840f21174a3ecf6544130194e2652cbb73">
+        <dex dex="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\pre-dexed\debug\classes-54351f3ac964077ef7dedaaab15031f5b153017b.jar" />
+    </item>
+    <item
+        jar="G:\devProjectGit\RAK_ipcam\Demo1\app\libs\recyclerview-v7-21.0.0-rc1.jar"
+        jumboMode="false"
+        revision="25.0.3"
+        sha1="14d500eeb7128db6c0f9b55f166c42eacf00f3b6">
+        <dex dex="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\pre-dexed\debug\recyclerview-v7-21.0.0-rc1-d58b8ed6ebba28aa6e269a107e09d3c361a7238e.jar" />
+    </item>
+    <item
+        jar="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\exploded-aar\wisview.sdk\jars\classes.jar"
+        jumboMode="false"
+        revision="25.0.3"
+        sha1="eaaee873a9563af616872c2c3add6a627947e17b">
+        <dex dex="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\pre-dexed\debug\classes-217d155dbc7219c602ba47f0f18eb945b91b2199.jar" />
+    </item>
+    <item
+        jar="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\exploded-aar\com.android.support\support-compat\25.3.1\jars\classes.jar"
+        jumboMode="false"
+        revision="25.0.3"
+        sha1="da27a32db6af8954ee8061537c7d476fcb1df46f">
+        <dex dex="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\pre-dexed\debug\classes-96a31535e0273d3707cec8d0d233ddf1448a72ca.jar" />
+    </item>
+    <item
+        jar="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\exploded-aar\com.android.support\support-fragment\25.3.1\jars\classes.jar"
+        jumboMode="false"
+        revision="25.0.3"
+        sha1="4a26a1154d053ab11aaf4c3967c42a4d66390991">
+        <dex dex="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\pre-dexed\debug\classes-4149d5f8280be474a23156b127bb059811f3aa0d.jar" />
+    </item>
+    <item
+        jar="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\25.3.1\jars\classes.jar"
+        jumboMode="false"
+        revision="25.0.3"
+        sha1="47635644d0d5c103c1dd8360549eb9ba3225c7d3">
+        <dex dex="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\pre-dexed\debug\classes-c4d6e0d957c9c892205d0e4f41fac0724a3c3119.jar" />
+    </item>
+    <item
+        jar="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\25.3.1\jars\classes.jar"
+        jumboMode="false"
+        revision="25.0.3"
+        sha1="45f697922e6f072daa12f8a2995dc77ab03c11da">
+        <dex dex="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\pre-dexed\debug\classes-e04109aa687fcace8442a12d40c81203993c7058.jar" />
+    </item>
+    <item
+        jar="C:\Users\KimFamily\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\25.3.1\support-annotations-25.3.1.jar"
+        jumboMode="false"
+        revision="25.0.3"
+        sha1="bf8841d29fa39e077730e7a91222c2ce269fa7c9">
+        <dex dex="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\pre-dexed\debug\support-annotations-25.3.1-5841cdce657a96c1fbbd0326d3b54c56c43a0dda.jar" />
+    </item>
+    <item
+        jar="G:\devProjectGit\RAK_ipcam\Demo1\app\libs\jason-all.jar"
+        jumboMode="false"
+        revision="25.0.3"
+        sha1="45ce8390f1dc85719fa7124141b21d2a18e1363e">
+        <dex dex="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\pre-dexed\debug\jason-all-1ed0827f53665defba275325e398323175433d47.jar" />
+    </item>
+    <item
+        jar="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\25.3.1\jars\classes.jar"
+        jumboMode="false"
+        revision="25.0.3"
+        sha1="efb8cb62d47d157c29d1521daac7eefd4cb881ee">
+        <dex dex="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\pre-dexed\debug\classes-f5e747bd8b92ae63acd961d93611209b8adc5352.jar" />
+    </item>
+
+</items>
