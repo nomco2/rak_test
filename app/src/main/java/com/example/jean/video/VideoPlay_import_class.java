@@ -30,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.demo.sdk.Controller;
 import com.demo.sdk.Enums;
 import com.demo.sdk.Module;
@@ -38,8 +39,8 @@ import com.example.jean.component.RequestPermission;
 import com.example.jean.rakvideotest.R;
 import com.example.jean.video.api.ParametersConfig;
 import com.example.jean.video.api.SendAudio;
-import com.example.jean.video.api.TcpSocket;
 import com.nabto.api.RemoteTunnel;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -49,14 +50,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import paintss.common.Toast;
 
 /**
  * Created by Jean on 2016/1/12.
  */
-public class VideoPlay extends Activity{
+public class VideoPlay_import_class{
     public static RelativeLayout _videoPlayView;
-    public static VideoPlay _self;
+    public static VideoPlay_import_class _self;
     KeyguardManager mKeyguardManager = null;
     private KeyguardManager.KeyguardLock mKeyguardLock = null;
     private PowerManager pm;
@@ -121,6 +123,92 @@ public class VideoPlay extends Activity{
 
 
 
+    private Context mContext;
+    private Activity mActiviy;
+
+    /**
+     *
+     * @param from_context
+     * @param from_pm
+     * @param from_KeyguardManager
+     * @param from_device_info
+     * @param from_device_data
+     */
+    public VideoPlay_import_class(Context from_context,
+                                  PowerManager from_pm, KeyguardManager from_KeyguardManager,
+                                  String[] from_device_info, int[] from_device_data,
+                                  Activity from_Activity){
+        mContext = from_context;
+
+        pm = from_pm;
+        mKeyguardManager = from_KeyguardManager;
+
+        mActiviy = from_Activity;
+
+
+
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+//        setContentView(R.layout.activity_video_vertical);
+//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);//自动旋转
+        DisplayMetrics metric = new DisplayMetrics();
+//        getWindowManager().getDefaultDisplay().getMetrics(metric);
+        _viewWidth = 100; //metric.widthPixels;  // 屏幕宽度（像素）
+        _viewHeight = 100; //metric.heightPixels;  // 屏幕高度（像素）
+        wakeLock = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "My Tag");
+        wakeLock.acquire();
+        mKeyguardLock = mKeyguardManager.newKeyguardLock("");
+        mKeyguardLock.disableKeyguard();
+        _self=this;
+        _requestPermission=new RequestPermission();
+
+
+
+
+        sp= new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);//第一个参数为同时播放数据流的最大个数，第二数据流类型，第三为声音质量
+        music = sp.load(mContext, R.raw.photo_voice, 1); //把你的声音素材放到res/raw里，第2个参数即为资源文件，第3个为音乐的优先级
+        music_begin = sp.load(mContext, R.raw.begin_record, 2);
+        music_end = sp.load(mContext, R.raw.end_record, 3);
+//        Intent intent = getIntent();
+        _deviceName = from_device_info[0];//intent.getStringExtra("devicename");
+        _deviceId = from_device_info[1]; //intent.getStringExtra("deviceid");
+        _deviceIp = from_device_info[2];//intent.getStringExtra("deviceip");
+        _devicePsk = from_device_info[3];//intent.getStringExtra("devicepsk");
+        _fps = from_device_data[0]; // intent.getIntExtra("devicefps",20);
+        _version = from_device_info[4];//intent.getStringExtra("version");
+        _decoderType = from_device_data[1];//intent.getIntExtra("decodertype",0);
+        _videoType = from_device_data[2]; //intent.getIntExtra("videotype",0);
+        _videoScreen= from_device_data[3]; //intent.getIntExtra("videoscreen",1);
+        if (_videoType==0){
+            _pipe = Enums.Pipe.H264_PRIMARY;
+        }
+        else{
+            _pipe = Enums.Pipe.MJPEG_PRIMARY;
+        }
+        _videoName.setText(_deviceName);
+        Toast.show(mContext,_deviceIp);
+        if(_version.toLowerCase().contains("wifiv")){
+            _isLx520=false;
+            _videoVHD.setVisibility(View.VISIBLE);
+        }
+        else{
+            _isLx520=true;
+            _videoVHD.setVisibility(View.GONE);
+        }
+
+        //悬浮框播放的view
+//        if(_floatView==null) {
+//            InitFloatView();
+//        }
+        //Start Play Video
+        _startPlay();
+
+
+
+    }
+
+/*
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -240,10 +328,14 @@ public class VideoPlay extends Activity{
 
 
     }
+*/
+
+
 
     /**
      *  初始化悬浮框
      */
+    /*
     void InitFloatView(){
         LayoutInflater _floatViewInflater = getLayoutInflater();
         _floatView = _floatViewInflater.inflate(R.layout.float_view, (ViewGroup) findViewById(R.id.float_view1));
@@ -256,28 +348,34 @@ public class VideoPlay extends Activity{
             }
         });
     }
+    */
 
     /**
      *  启动悬浮框
      */
+    /*
     @Override
     public void onUserLeaveHint() {
         super.onUserLeaveHint();
         //在这里进行相关的处理
         //sendBroadcast(new Intent(FloatViewBroadCastReceiver.ACTION_MOVIE_START));
     }
+    */
 
 
     /**
      *  关闭悬浮框
      */
+    /*
     void CloseFloatView(){
         sendBroadcast(new Intent(FloatViewBroadCastReceiver.ACTION_MOVIE_STOP));
         InitFloatView();
         if(_player!=null)
             _player.setDisplayView(getApplication(),_videoView,_floatVideoView,_decoderType);
     }
+    */
 
+    /*
     @Override
     protected void onResume() {
         super.onResume();
@@ -295,6 +393,7 @@ public class VideoPlay extends Activity{
         Stop();
         finish();
     }
+    */
 
     /**
      *  Start Parameters Config Listener
@@ -317,16 +416,16 @@ public class VideoPlay extends Activity{
                                     if(index2!=-1){
                                         _pipe_not_520=ff.substring(index+keyStr.length(),index2);
                                         if(_pipe_not_520.equals("0")){
-                                            _videoPipe.setText(getString(R.string.video_BD));
+//                                            _videoPipe.setText(getString(R.string.video_BD));
                                         }
                                         else if(_pipe_not_520.equals("1")){
-                                            _videoPipe.setText(getString(R.string.video_BD));
+//                                            _videoPipe.setText(getString(R.string.video_BD));
                                         }
                                         else if(_pipe_not_520.equals("2")){
-                                            _videoPipe.setText(getString(R.string.video_HD));
+//                                            _videoPipe.setText(getString(R.string.video_HD));
                                         }
                                         else if(_pipe_not_520.equals("3")){
-                                            _videoPipe.setText(getString(R.string.video_VHD));
+//                                            _videoPipe.setText(getString(R.string.video_VHD));
                                         }
                                     }
                                 }
@@ -341,10 +440,10 @@ public class VideoPlay extends Activity{
                                         String rString = result.body.substring(index + value.length(), index1);
                                         if (rString.equals("0")) {
                                             Is_Sd_Record = false;
-                                            videoSdRecordImg.setImageResource(R.drawable.ico_sdcard);
+//                                            videoSdRecordImg.setImageResource(R.drawable.ico_sdcard);
                                         } else  if (rString.equals("1")) {
                                             Is_Sd_Record = true;
-                                            videoSdRecordImg.setImageResource(R.drawable.ico_sdcarding);
+//                                            videoSdRecordImg.setImageResource(R.drawable.ico_sdcarding);
                                         }
                                         else{
                                             Is_Sd_Record = false;
@@ -370,14 +469,14 @@ public class VideoPlay extends Activity{
                                             Is_Sd_Record = false;
                                             videoSdRecordImg.setImageResource(R.drawable.ico_sdcard);
                                             if (c == -4) {
-                                                Toast.show(VideoPlay.this,"Sd-card is recording");
+                                                Toast.show(mContext,"Sd-card is recording");
                                             } else {
-                                                Toast.show(VideoPlay.this,"Sd-card not found");
+                                                Toast.show(mContext,"Sd-card not found");
                                             }
                                         } else {
                                             Is_Sd_Record = true;
                                             videoSdRecordImg.setImageResource(R.drawable.ico_sdcarding);
-                                            Toast.show(VideoPlay.this,"Start Sd-Record success");
+                                            Toast.show(mContext,"Start Sd-Record success");
                                         }
                                     }
                                 }
@@ -390,12 +489,12 @@ public class VideoPlay extends Activity{
                                         String rString = result.body.substring(index + value.length(), index1);
                                         if (rString.equals("0")) {
                                             Is_Sd_Record = false;
-                                            Toast.show(VideoPlay.this,"Stop Sd-Record success");
+                                            Toast.show(mContext,"Stop Sd-Record success");
                                             videoSdRecordImg.setImageResource(R.drawable.ico_sdcard);
                                         } else {
                                             Is_Sd_Record = true;
                                             videoSdRecordImg.setImageResource(R.drawable.ico_sdcarding);
-                                            Toast.show(VideoPlay.this,"Stop Sd-Record failed");
+                                            Toast.show(mContext,"Stop Sd-Record failed");
                                         }
                                     }
                                 }
@@ -404,11 +503,11 @@ public class VideoPlay extends Activity{
                         else {// status code not 200
                             if (result.type == ParametersConfig.START_SD_RECORD) {
                                 Is_Sd_Record = false;
-                                Toast.show(VideoPlay.this,"Start Sd-Record failed");
+                                Toast.show(mContext,"Start Sd-Record failed");
                             }
                             if (result.type == ParametersConfig.STOP_SD_RECORD) {
                                 Is_Sd_Record = true;
-                                Toast.show(VideoPlay.this,"Stop Sd-Record failed");
+                                Toast.show(mContext,"Stop Sd-Record failed");
                             }
                         }
                     }
@@ -446,11 +545,11 @@ public class VideoPlay extends Activity{
         _connectTime=0;
         if (_module == null)
         {
-            _module = new Module(this);
+            _module = new Module(mContext);
         }
         else
         {
-            _module.setContext(this);
+            _module.setContext(mContext);
         }
 
         _module.setLogLevel(Enums.LogLevel.VERBOSE);
@@ -473,11 +572,13 @@ public class VideoPlay extends Activity{
         _recording = _player.isRecording();
         if (_videoScreen==1) {
             _videoView2.setVisibility(View.GONE);
-            _player.setDisplayView(getApplication(), _videoView, null, _decoderType);
+//            _player.setDisplayView(getApplication(), _videoView, null, _decoderType);
+            _player.setDisplayView(mActiviy.getApplication(), _videoView, null, _decoderType);
         }
         else {
             _videoView2.setVisibility(View.VISIBLE);
-            _player.setDisplayView(getApplication(), _videoView, _videoView2, _decoderType);
+//            _player.setDisplayView(getApplication(), _videoView, _videoView2, _decoderType);
+            _player.setDisplayView(mActiviy.getApplication(), _videoView, _videoView2, _decoderType);
         }
         _player.setOnStateChangedListener(new Player.OnStateChangedListener()
         {
@@ -565,6 +666,7 @@ public class VideoPlay extends Activity{
                     if (_stopTraffic) {
                         break;
                     }
+
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -647,7 +749,7 @@ public class VideoPlay extends Activity{
                                     Stop();
                                     finish();
                                     Intent intent = new Intent();
-                                    intent.setClass(VideoPlay.this, DeviceConnectFailed.class);
+                                    intent.setClass(VideoPlay_import_class.this, DeviceConnectFailed.class);
                                     startActivity(intent);
                                 }
                             });
@@ -706,7 +808,7 @@ public class VideoPlay extends Activity{
                         Stop();
                         finish();
                         Intent intent=new Intent();
-                        intent.setClass(VideoPlay.this,DeviceConnectFailed.class);
+                        intent.setClass(VideoPlay_import_class.this,DeviceConnectFailed.class);
                         startActivity(intent);
                     } else {
                         PlayVideo();
@@ -968,17 +1070,17 @@ public class VideoPlay extends Activity{
         public void onClick(View v) {
             if(photofile_path==null)
             {
-                _requestPermission.requestWriteSettings(VideoPlay.this);
+                _requestPermission.requestWriteSettings(VideoPlay_import_class.this);
                 return;
             }
             File file = new File(photofile_path);//获取本地已有视频数量
             if(file==null){
-                _requestPermission.requestWriteSettings(VideoPlay.this);
+                _requestPermission.requestWriteSettings(VideoPlay_import_class.this);
                 return;
             }
             File[] filephoto = file.listFiles();
             if(filephoto==null){
-                _requestPermission.requestWriteSettings(VideoPlay.this);
+                _requestPermission.requestWriteSettings(VideoPlay_import_class.this);
                 return;
             }
 
@@ -1063,17 +1165,17 @@ public class VideoPlay extends Activity{
             {
                 if(videofile_path==null)
                 {
-                    _requestPermission.requestWriteSettings(VideoPlay.this);
+                    _requestPermission.requestWriteSettings(VideoPlay_import_class.this);
                     return;
                 }
                 File file = new File(videofile_path);//获取本地已有视频数量
                 if(file==null){
-                    _requestPermission.requestWriteSettings(VideoPlay.this);
+                    _requestPermission.requestWriteSettings(VideoPlay_import_class.this);
                     return;
                 }
                 File[] filephoto = file.listFiles();
                 if(filephoto==null){
-                    _requestPermission.requestWriteSettings(VideoPlay.this);
+                    _requestPermission.requestWriteSettings(VideoPlay_import_class.this);
                     return;
                 }
 
@@ -1173,17 +1275,17 @@ public class VideoPlay extends Activity{
                             {
                                 if(voicefile_path==null)
                                 {
-                                    _requestPermission.requestWriteSettings(VideoPlay.this);
+                                    _requestPermission.requestWriteSettings(VideoPlay_import_class.this);
                                     return null;
                                 }
                                 File file = new File(voicefile_path);//获取本地已有视频数量
                                 if(file==null){
-                                    _requestPermission.requestWriteSettings(VideoPlay.this);
+                                    _requestPermission.requestWriteSettings(VideoPlay_import_class.this);
                                     return null;
                                 }
                                 File[] filephoto = file.listFiles();
                                 if(filephoto==null){
-                                    _requestPermission.requestWriteSettings(VideoPlay.this);
+                                    _requestPermission.requestWriteSettings(VideoPlay_import_class.this);
                                     return null;
                                 }
                                 voicefile=new FileOutputStream(voicefile_path+"/voice.pcm");
@@ -1435,7 +1537,7 @@ public class VideoPlay extends Activity{
 			intent.putExtra("ip", _deviceIp);
             intent.putExtra("psk", _devicePsk);
             intent.putExtra("controlport", _voicePort);
-			intent.setClass(VideoPlay.this,PlayBackFolderListActivity.class);
+			intent.setClass(VideoPlay_import_class.this,PlayBackFolderListActivity.class);
 			startActivity(intent);
         }
     };
@@ -1522,7 +1624,7 @@ public class VideoPlay extends Activity{
     /**
      *  Self
      */
-    public static VideoPlay self() {
+    public static VideoPlay_import_class self() {
         return _self;
     }
 
