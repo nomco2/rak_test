@@ -120,9 +120,9 @@ public class ParametersConfig {
 	 * Init
 	 */
 	public ParametersConfig(String ip, String password) {
-		_ip = ip;
-		if (!password.matches(""))
-			_password = password;
+		_ip = "127.0.0.1"; //ip;
+//		if (!password.matches(""))
+			_password = "admin"; // password;
 	}
 
 	private String urlEncode(String param) {

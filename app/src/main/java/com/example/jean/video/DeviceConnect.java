@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.Main_operation_class;
 import com.example.jean.rakvideotest.R;
 import com.example.jean.component.DeviceEntity;
 import com.example.jean.video.api.ParametersConfig;
@@ -147,12 +148,13 @@ public class DeviceConnect extends Activity{
                     //Save Password
                     DeviceEntity.modifyDevicePasswordById(_self, _deviceId, _deviceConnectPsk.getText().toString());
                     Intent intent = new Intent();
-                    intent.setClass(DeviceConnect.this, VideoPlay.class);
+                    intent.setClass(DeviceConnect.this, VideoPlay_temporary_use.class);
                     intent.putExtra("devicename", _deviceName);
                     intent.putExtra("deviceid", _deviceId);
                     intent.putExtra("deviceip", _deviceIp);
                     intent.putExtra("devicepsk", _deviceConnectPsk.getText().toString());
                     startActivity(intent);
+
                 }
                 else if (result.type == ParametersConfig.GET_FPS) {
                     if (result.statusCode == 200) {

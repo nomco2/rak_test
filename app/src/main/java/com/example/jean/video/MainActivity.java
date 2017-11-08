@@ -230,7 +230,8 @@ public class MainActivity extends Activity {
                 Log.e("ip=", _getIp.getText().toString());
 
                 Intent intent=new Intent();
-                intent.setClass(MainActivity.this, DeviceConnect.class);
+//                intent.setClass(MainActivity.this, DeviceConnect.class);
+                intent.setClass(MainActivity.this, VideoPlay_temporary_use.class);
                 intent.putExtra("devicename", _getName.getText().toString());
                 intent.putExtra("deviceid", _getId.getText().toString());
                 intent.putExtra("deviceip", _getIp.getText().toString());

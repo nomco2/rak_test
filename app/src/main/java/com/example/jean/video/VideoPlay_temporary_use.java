@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -26,6 +27,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -39,6 +44,7 @@ import com.example.jean.component.RequestPermission;
 import com.example.jean.rakvideotest.R;
 import com.example.jean.video.api.ParametersConfig;
 import com.example.jean.video.api.SendAudio;
+import com.joystick_and_buttons.Movable_Layout_Class;
 import com.nabto.api.RemoteTunnel;
 
 import java.io.File;
@@ -56,9 +62,9 @@ import paintss.common.Toast;
 /**
  * Created by Jean on 2016/1/12.
  */
-public class VideoPlay_import_class{
+public class VideoPlay_temporary_use extends Activity{
     public static RelativeLayout _videoPlayView;
-    public static VideoPlay_import_class _self;
+    public static VideoPlay_temporary_use _self;
     KeyguardManager mKeyguardManager = null;
     private KeyguardManager.KeyguardLock mKeyguardLock = null;
     private PowerManager pm;
@@ -123,94 +129,80 @@ public class VideoPlay_import_class{
 
 
 
-    private Context mContext;
-    private Activity mActiviy;
-    private RequestPermission _requestPermission;
+    /***************** 플로팅 뷰 *********************/
 
-    /**
-     *
-     * @param from_context
-     * @param from_pm
-     * @param from_KeyguardManager
-     * @param from_device_info
-     * @param from_device_data
-     */
-    public VideoPlay_import_class(Context from_context,
-                                  PowerManager from_pm, KeyguardManager from_KeyguardManager,
-                                  String[] from_device_info, int[] from_device_data,
-                                  Activity from_Activity, RequestPermission from_requestPermission){
-        mContext = from_context;
+    /***************************** 모터 이동 버튼*******************/
+    private ViewGroup mainLayout;
+    private ViewGroup direction_arrow_frame;
+    Movable_Layout_Class direction_arrow_frame_moving;
 
-        pm = from_pm;
-        mKeyguardManager = from_KeyguardManager;
+    private ImageButton left_up;
+    private ImageButton middle_up;
+    private ImageButton right_up;
 
-        mActiviy = from_Activity;
-        _requestPermission = from_requestPermission;
+    private ImageButton left;
+    private ImageButton middle;
+    private ImageButton right;
 
+    private ImageButton left_down;
+    private ImageButton middle_down;
+    private ImageButton right_down;
 
+    /******************** 데이터 표시뷰 플로팅 ****************/
+    private ViewGroup data_viewing_area;
+    Movable_Layout_Class data_viewing_area_moving;
+    private TextView standard_height;
+    private TextView comparison_height;
+    private TextView height_difference;
+    private boolean is_starting_measure= false;
+    private boolean execute_standard_value_saving = false;
+    private int[] standard_value = new int[6];
 
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-//        setContentView(R.layout.activity_video_vertical);
-//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);//自动旋转
-        DisplayMetrics metric = new DisplayMetrics();
-//        getWindowManager().getDefaultDisplay().getMetrics(metric);
-        _viewWidth = 100; //metric.widthPixels;  // 屏幕宽度（像素）
-        _viewHeight = 100; //metric.heightPixels;  // 屏幕高度（像素）
-        wakeLock = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "My Tag");
-        wakeLock.acquire();
-        mKeyguardLock = mKeyguardManager.newKeyguardLock("");
-        mKeyguardLock.disableKeyguard();
-        _self=this;
-        _requestPermission=new RequestPermission();
+    /*****************카메라 확대 버튼 플로팅 ***************/
 
+    private int is_camera_extended = 0;
+    private ViewGroup camera_extend_button_area;
+    Movable_Layout_Class camera_extend_button_moving;
 
+    /*************UI 스케일 조정값 저장 ****************/
+    SharedPreferences UI_scale_size_value;
+    SharedPreferences.Editor UI_scale_size_value_editor;
+    private float direction_arrow_frame_current_scale_size;
+    private float data_viewing_area_current_scale;
+    private float camera_current_scale_size;
+    private Button direction_arrow_frame_scale_size_btn;
+    private Button data_viewing_area_scale_size_btn;
+    private ImageButton camera_scale_size_up_btn;
+    private ImageButton camera_scale_size_down_btn;
 
-
-        sp= new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);//第一个参数为同时播放数据流的最大个数，第二数据流类型，第三为声音质量
-        music = sp.load(mContext, R.raw.photo_voice, 1); //把你的声音素材放到res/raw里，第2个参数即为资源文件，第3个为音乐的优先级
-        music_begin = sp.load(mContext, R.raw.begin_record, 2);
-        music_end = sp.load(mContext, R.raw.end_record, 3);
-//        Intent intent = getIntent();
-        _deviceName = from_device_info[0];//intent.getStringExtra("devicename");
-        _deviceId = from_device_info[1]; //intent.getStringExtra("deviceid");
-        _deviceIp = from_device_info[2];//intent.getStringExtra("deviceip");
-        _devicePsk = from_device_info[3];//intent.getStringExtra("devicepsk");
-        _fps = from_device_data[0]; // intent.getIntExtra("devicefps",20);
-        _version = from_device_info[4];//intent.getStringExtra("version");
-        _decoderType = from_device_data[1];//intent.getIntExtra("decodertype",0);
-        _videoType = from_device_data[2]; //intent.getIntExtra("videotype",0);
-        _videoScreen= from_device_data[3]; //intent.getIntExtra("videoscreen",1);
-        if (_videoType==0){
-            _pipe = Enums.Pipe.H264_PRIMARY;
-        }
-        else{
-            _pipe = Enums.Pipe.MJPEG_PRIMARY;
-        }
-        _videoName.setText(_deviceName);
-        Toast.show(mContext,_deviceIp);
-        if(_version.toLowerCase().contains("wifiv")){
-            _isLx520=false;
-            _videoVHD.setVisibility(View.VISIBLE);
-        }
-        else{
-            _isLx520=true;
-            _videoVHD.setVisibility(View.GONE);
-        }
-
-        //悬浮框播放的view
-//        if(_floatView==null) {
-//            InitFloatView();
-//        }
-        //Start Play Video
-        _startPlay();
+    boolean direction_arrow_frame_scale_up_down = true;
+    boolean data_viewing_area_scale_up_down = true;
 
 
 
-    }
 
-/*
+    /************* 나머지 설정 버튼 관련****************/
+
+    /* 보정 계수 관련 */
+    private Button correction_value_btn;
+    private int first_value;
+    private float correction_value = 0.0f;
+    private boolean is_starting_finding_correction_value = false;
+
+
+
+    private Button move_original_button_location; //버튼 위치 안보일 때
+    private CheckBox move_button_hold; //버튼 위치 고정
+
+    private ImageButton setting_button; //세팅 메뉴 보이기/안보이기
+
+
+    //movable class 홀드 됬는지 이전 설정값 저장
+    SharedPreferences location_hold_boolean;
+    SharedPreferences.Editor location_hold_boolean_editor;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -292,12 +284,12 @@ public class VideoPlay_import_class{
         music_begin = sp.load(this, R.raw.begin_record, 2);
         music_end = sp.load(this, R.raw.end_record, 3);
         Intent intent = getIntent();
-        _deviceName = intent.getStringExtra("devicename");
+        _deviceName = "굴삭 레벨기 1"; //intent.getStringExtra("devicename");
         _deviceId = intent.getStringExtra("deviceid");
         _deviceIp = intent.getStringExtra("deviceip");
         _devicePsk = intent.getStringExtra("devicepsk");
         _fps = intent.getIntExtra("devicefps",20);
-        _version = intent.getStringExtra("version");
+        _version = "ver1";// intent.getStringExtra("version");
         _decoderType = intent.getIntExtra("decodertype",0);
         _videoType = intent.getIntExtra("videotype",0);
         _videoScreen= intent.getIntExtra("videoscreen",1);
@@ -327,17 +319,202 @@ public class VideoPlay_import_class{
 
 
 
+        /************************** 플로팅 뷰 **************************/
+        /* 플로팅을 위한 베이스 레이아웃 */
+        mainLayout = (RelativeLayout) findViewById(R.id.video_play_view);
 
 
+        /*********모터 방향 버튼 관련 **********/
+
+        String[] direction_arrow_location = new String[2];
+        direction_arrow_location[0] = "direction_arrow_location_x";
+        direction_arrow_location[1] = "direction_arrow_location_y";
+        String direction_arrow_scale = "direction_arrow_scale";
+        direction_arrow_frame = (FrameLayout) findViewById(R.id.direction_arrow_frame);
+        direction_arrow_frame_moving = new Movable_Layout_Class(this, mainLayout, direction_arrow_frame, direction_arrow_location, direction_arrow_scale);
+        direction_arrow_frame_current_scale_size = direction_arrow_frame_moving.Saved_scale_size();
+
+
+
+        left_up = (ImageButton) findViewById(R.id.left_up);
+        middle_up = (ImageButton) findViewById(R.id.middle_up);
+        right_up = (ImageButton) findViewById(R.id.right_up);
+
+        left = (ImageButton) findViewById(R.id.left);
+        middle = (ImageButton) findViewById(R.id.middle);
+        right = (ImageButton) findViewById(R.id.right);
+
+        left_down = (ImageButton) findViewById(R.id.left_down);
+        middle_down = (ImageButton) findViewById(R.id.middle_down);
+        right_down = (ImageButton) findViewById(R.id.right_down);
+
+        left_up.setOnTouchListener(arrow_button);
+        middle_up.setOnTouchListener(arrow_button);
+        right_up.setOnTouchListener(arrow_button);
+        left.setOnTouchListener(arrow_button);
+
+        right.setOnTouchListener(arrow_button);
+        left_down.setOnTouchListener(arrow_button);
+        middle_down.setOnTouchListener(arrow_button);
+        right_down.setOnTouchListener(arrow_button);
+
+        middle.setOnClickListener(floating_buttons);
+
+
+/*************카메라 확대 버튼 **********/
+        String[] cemera_extend_button_location = new String[2];
+        cemera_extend_button_location[0] = "cemera_extend_button_location_x";
+        cemera_extend_button_location[1] = "cemera_extend_button_location_y";
+        camera_extend_button_area = (FrameLayout) findViewById(R.id.camera_extend_button_area);
+        camera_extend_button_moving = new Movable_Layout_Class(this, mainLayout, camera_extend_button_area, cemera_extend_button_location);
+        camera_scale_size_up_btn = (ImageButton)findViewById(R.id.camera_scale_size_up_btn);
+        camera_scale_size_up_btn.setOnClickListener(floating_buttons);
+
+
+
+
+
+        /**********데이터 표시뷰 플로팅 *************/
+
+        String[] data_view_location = new String[2];
+        data_view_location[0] = "data_view_location_x";
+        data_view_location[1] = "data_view_location_y";
+        String data_view_scale = "data_view_scale";
+        data_viewing_area = (FrameLayout) findViewById(R.id.data_viewing_area);
+        data_viewing_area_moving = new Movable_Layout_Class(this, mainLayout, data_viewing_area, data_view_location, data_view_scale);
+        data_viewing_area_current_scale = data_viewing_area_moving.Saved_scale_size();
+
+        standard_height = (TextView) findViewById(R.id.standard_height);
+        comparison_height = (TextView) findViewById(R.id.comparison_height);
+        height_difference = (TextView) findViewById(R.id.height_difference);
+
+
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //스크린 회전 고정
+//        _videoView.setRotation(90);
+//        _videoView2.setRotation(90);
     }
-*/
+
+
+
+
+
+    private View.OnTouchListener arrow_button = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+
+
+              /* 방향 버튼 눌릴때 */
+            int action = event.getAction();
+
+            if(action == MotionEvent.ACTION_DOWN) {
+//                Toast.makeText(getApplicationContext(),"버튼누름",Toast.LENGTH_SHORT).show();
+
+
+//                if (mSerialConn != null) { //시리얼 연결됬을때만
+                    switch (v.getId()){
+                        case R.id.left_up :
+//                            mSerialConn.motor_contol_command(1);
+                            break;
+                        case R.id.middle_up :
+//                            mSerialConn.motor_contol_command(2);
+                            break;
+                        case R.id.right_up :
+//                            mSerialConn.motor_contol_command(3);
+                            break;
+                        case R.id.left :
+//                            mSerialConn.motor_contol_command(4);
+                            break;
+                        //middle is onClicklistener
+//                        case R.id.middle :
+//                            mSerialConn.motor_contol_command(5);
+//                            break;
+                        case R.id.right :
+//                            mSerialConn.motor_contol_command(6);
+                            break;
+                        case R.id.left_down :
+//                            mSerialConn.motor_contol_command(7);
+                            break;
+                        case R.id.middle_down :
+//                            mSerialConn.motor_contol_command(8);
+                            break;
+                        case R.id.right_down :
+//                            mSerialConn.motor_contol_command(9);
+                            break;
+
+                    }
+                }
+//            }
+
+
+            /* 방향 버튼 뗄 때 */
+            if(action == MotionEvent.ACTION_UP) {
+
+                    switch (v.getId()){
+                        case R.id.left_up :
+//                            Toast.makeText(getApplicationContext(),"땜",Toast.LENGTH_SHORT).show();
+//                            mSerialConn.motor_contol_command(0);
+                            break;
+                        case R.id.middle_up :
+//                            mSerialConn.motor_contol_command(0);
+                            break;
+                        case R.id.right_up :
+//                            mSerialConn.motor_contol_command(0);
+                            break;
+                        case R.id.left :
+//                            mSerialConn.motor_contol_command(0);
+                            break;
+                        //middle is onClicklistener
+//                        case R.id.middle :
+//                            mSerialConn.motor_contol_command(0);
+//                            break;
+                        case R.id.right :
+//                            mSerialConn.motor_contol_command(0);
+                            break;
+                        case R.id.left_down :
+//                            mSerialConn.motor_contol_command(0);
+                            break;
+                        case R.id.middle_down :
+//                            mSerialConn.motor_contol_command(0);
+                            break;
+                        case R.id.right_down :
+//                            mSerialConn.motor_contol_command(0);
+                            break;
+
+                    }
+                }
+
+
+
+            return false;
+        }
+    };//ontouchlistener 끝
+
+
+
+    View.OnClickListener floating_buttons = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+
+        }
+    };
+
+
+
+
+
+
+
+
+
+
 
 
 
     /**
      *  初始化悬浮框
      */
-    /*
     void InitFloatView(){
         LayoutInflater _floatViewInflater = getLayoutInflater();
         _floatView = _floatViewInflater.inflate(R.layout.float_view, (ViewGroup) findViewById(R.id.float_view1));
@@ -350,34 +527,28 @@ public class VideoPlay_import_class{
             }
         });
     }
-    */
 
     /**
      *  启动悬浮框
      */
-    /*
     @Override
     public void onUserLeaveHint() {
         super.onUserLeaveHint();
         //在这里进行相关的处理
         //sendBroadcast(new Intent(FloatViewBroadCastReceiver.ACTION_MOVIE_START));
     }
-    */
 
 
     /**
      *  关闭悬浮框
      */
-    /*
     void CloseFloatView(){
         sendBroadcast(new Intent(FloatViewBroadCastReceiver.ACTION_MOVIE_STOP));
         InitFloatView();
         if(_player!=null)
             _player.setDisplayView(getApplication(),_videoView,_floatVideoView,_decoderType);
     }
-    */
 
-    /*
     @Override
     protected void onResume() {
         super.onResume();
@@ -395,7 +566,6 @@ public class VideoPlay_import_class{
         Stop();
         finish();
     }
-    */
 
     /**
      *  Start Parameters Config Listener
@@ -418,16 +588,16 @@ public class VideoPlay_import_class{
                                     if(index2!=-1){
                                         _pipe_not_520=ff.substring(index+keyStr.length(),index2);
                                         if(_pipe_not_520.equals("0")){
-//                                            _videoPipe.setText(getString(R.string.video_BD));
+                                            _videoPipe.setText(getString(R.string.video_BD));
                                         }
                                         else if(_pipe_not_520.equals("1")){
-//                                            _videoPipe.setText(getString(R.string.video_BD));
+                                            _videoPipe.setText(getString(R.string.video_BD));
                                         }
                                         else if(_pipe_not_520.equals("2")){
-//                                            _videoPipe.setText(getString(R.string.video_HD));
+                                            _videoPipe.setText(getString(R.string.video_HD));
                                         }
                                         else if(_pipe_not_520.equals("3")){
-//                                            _videoPipe.setText(getString(R.string.video_VHD));
+                                            _videoPipe.setText(getString(R.string.video_VHD));
                                         }
                                     }
                                 }
@@ -442,10 +612,10 @@ public class VideoPlay_import_class{
                                         String rString = result.body.substring(index + value.length(), index1);
                                         if (rString.equals("0")) {
                                             Is_Sd_Record = false;
-//                                            videoSdRecordImg.setImageResource(R.drawable.ico_sdcard);
+                                            videoSdRecordImg.setImageResource(R.drawable.ico_sdcard);
                                         } else  if (rString.equals("1")) {
                                             Is_Sd_Record = true;
-//                                            videoSdRecordImg.setImageResource(R.drawable.ico_sdcarding);
+                                            videoSdRecordImg.setImageResource(R.drawable.ico_sdcarding);
                                         }
                                         else{
                                             Is_Sd_Record = false;
@@ -471,14 +641,14 @@ public class VideoPlay_import_class{
                                             Is_Sd_Record = false;
                                             videoSdRecordImg.setImageResource(R.drawable.ico_sdcard);
                                             if (c == -4) {
-                                                Toast.show(mContext,"Sd-card is recording");
+                                                Toast.show(VideoPlay_temporary_use.this,"Sd-card is recording");
                                             } else {
-                                                Toast.show(mContext,"Sd-card not found");
+                                                Toast.show(VideoPlay_temporary_use.this,"Sd-card not found");
                                             }
                                         } else {
                                             Is_Sd_Record = true;
                                             videoSdRecordImg.setImageResource(R.drawable.ico_sdcarding);
-                                            Toast.show(mContext,"Start Sd-Record success");
+                                            Toast.show(VideoPlay_temporary_use.this,"Start Sd-Record success");
                                         }
                                     }
                                 }
@@ -491,12 +661,12 @@ public class VideoPlay_import_class{
                                         String rString = result.body.substring(index + value.length(), index1);
                                         if (rString.equals("0")) {
                                             Is_Sd_Record = false;
-                                            Toast.show(mContext,"Stop Sd-Record success");
+                                            Toast.show(VideoPlay_temporary_use.this,"Stop Sd-Record success");
                                             videoSdRecordImg.setImageResource(R.drawable.ico_sdcard);
                                         } else {
                                             Is_Sd_Record = true;
                                             videoSdRecordImg.setImageResource(R.drawable.ico_sdcarding);
-                                            Toast.show(mContext,"Stop Sd-Record failed");
+                                            Toast.show(VideoPlay_temporary_use.this,"Stop Sd-Record failed");
                                         }
                                     }
                                 }
@@ -505,11 +675,11 @@ public class VideoPlay_import_class{
                         else {// status code not 200
                             if (result.type == ParametersConfig.START_SD_RECORD) {
                                 Is_Sd_Record = false;
-                                Toast.show(mContext,"Start Sd-Record failed");
+                                Toast.show(VideoPlay_temporary_use.this,"Start Sd-Record failed");
                             }
                             if (result.type == ParametersConfig.STOP_SD_RECORD) {
                                 Is_Sd_Record = true;
-                                Toast.show(mContext,"Stop Sd-Record failed");
+                                Toast.show(VideoPlay_temporary_use.this,"Stop Sd-Record failed");
                             }
                         }
                     }
@@ -539,9 +709,6 @@ public class VideoPlay_import_class{
     public static String playback_path;
     private FileOutputStream photofile;
     private int _connectTime=0;
-
-
-
     public void PlayVideo() {
         if(_isLx520==false){
             getResolution();
@@ -550,16 +717,17 @@ public class VideoPlay_import_class{
         _connectTime=0;
         if (_module == null)
         {
-            _module = new Module(mContext);
+            _module = new Module(this);
         }
         else
         {
-            _module.setContext(mContext);
+            _module.setContext(this);
         }
 
         _module.setLogLevel(Enums.LogLevel.VERBOSE);
         _module.setUsername("admin");
-        _module.setPassword(_devicePsk);
+//        _module.setPassword(_devicePsk);
+        _module.setPassword("admin");
         _module.setPlayerPort(_devicePort);
         _module.setModuleIp(_deviceIp);
         _controller = _module.getController();
@@ -577,13 +745,11 @@ public class VideoPlay_import_class{
         _recording = _player.isRecording();
         if (_videoScreen==1) {
             _videoView2.setVisibility(View.GONE);
-//            _player.setDisplayView(getApplication(), _videoView, null, _decoderType);
-            _player.setDisplayView(mActiviy.getApplication(), _videoView, null, _decoderType);
+            _player.setDisplayView(getApplication(), _videoView, null, _decoderType);
         }
         else {
             _videoView2.setVisibility(View.VISIBLE);
-//            _player.setDisplayView(getApplication(), _videoView, _videoView2, _decoderType);
-            _player.setDisplayView(mActiviy.getApplication(), _videoView, _videoView2, _decoderType);
+            _player.setDisplayView(getApplication(), _videoView, _videoView2, _decoderType);
         }
         _player.setOnStateChangedListener(new Player.OnStateChangedListener()
         {
@@ -671,8 +837,6 @@ public class VideoPlay_import_class{
                     if (_stopTraffic) {
                         break;
                     }
-
-                    /*
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -741,81 +905,6 @@ public class VideoPlay_import_class{
                             }
                         }
                     });
-                    */
-
-
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            //检测到断开进行重连
-                            if(_player!=null){
-                                Log.e("Reconnect...","");
-                                if(_player.getState()== Enums.State.IDLE){
-                                    _videoConnectLayout.setVisibility(View.VISIBLE);
-                                    _videoLayout.setVisibility(View.GONE);
-                                    _player.stop();
-                                    if(_deviceIp.equals("127.0.0.1")){
-                                        if (_videoType==0){
-                                            _pipe = Enums.Pipe.H264_SECONDARY;
-                                        }
-                                        else{
-                                            _pipe = Enums.Pipe.MJPEG_PRIMARY;
-                                        }
-
-                                        if(_deviceId.equals("www.sunnyoptical.com")) {
-                                            String url="rtsp://"+_deviceIp+"/live1.sdp";
-                                            _player.playUrl(url,Enums.Transport.TCP);
-                                        }
-                                        else{
-                                            _player.play(_pipe, Enums.Transport.TCP);
-                                        }
-                                    }
-                                    else{
-                                        if (_videoType==0){
-                                            _pipe = Enums.Pipe.H264_PRIMARY;
-                                        }
-                                        else{
-                                            _pipe = Enums.Pipe.MJPEG_PRIMARY;
-                                        }
-
-                                        if(_deviceId.equals("www.sunnyoptical.com")) {
-                                            String url="rtsp://"+_deviceIp+"/live1.sdp";
-                                            _player.playUrl(url,Enums.Transport.UDP);
-                                        }
-                                        else{
-                                            _player.play(_pipe, Enums.Transport.UDP);
-                                        }
-                                    }
-                                }
-                            }
-
-                            if(_recording)
-                            {
-                                videotime++;
-                                _videoRecordTime.setVisibility(View.VISIBLE);
-                                _videoRecordTime.setText("REC "+showTimeCount(videotime));
-                            }
-                            else
-                            {
-                                videotime=0;
-                                _videoRecordTime.setVisibility(View.INVISIBLE);
-                            }
-
-                            if(Is_Sd_Record){
-                                sdvideotime++;
-                                video_sd_record_time.setVisibility(View.VISIBLE);
-                                video_sd_record_time.setText("REC "+showTimeCount(sdvideotime));
-                            }
-                            else{
-                                sdvideotime=0;
-                                video_sd_record_time.setVisibility(View.INVISIBLE);
-                            }
-
-                        }
-                    }).start();
-
-
-
 
                     try {
                         Thread.sleep(1000);
@@ -824,30 +913,16 @@ public class VideoPlay_import_class{
                     if(_player.getState()!= Enums.State.PLAYING){
                         _connectTime++;
                         if(_connectTime>30){
-                            /*
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     Stop();
                                     finish();
                                     Intent intent = new Intent();
-                                    intent.setClass(VideoPlay_import_class.this, DeviceConnectFailed.class);
+                                    intent.setClass(VideoPlay_temporary_use.this, DeviceConnectFailed.class);
                                     startActivity(intent);
                                 }
                             });
-                            */
-
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Stop();
-                                    mActiviy.finish();
-                                    Intent intent = new Intent();
-                                    intent.setClass(mActiviy, DeviceConnectFailed.class);
-                                    mActiviy.startActivity(intent);
-                                }
-                            }).start();
-
                         }
                         Log.e("_connectTime==>",""+_connectTime);
                     }
@@ -884,13 +959,13 @@ public class VideoPlay_import_class{
         _videoLayout.setVisibility(View.GONE);
         if(_deviceIp.equals("127.0.0.1")){
             if(_remoteTunnel1==null)
-                _remoteTunnel1=new RemoteTunnel(mActiviy.getApplicationContext());
+                _remoteTunnel1=new RemoteTunnel(getApplicationContext());
             _remoteTunnel1.openTunnel(1, _devicePort, _devicePort, _deviceId);
             _remoteTunnel1.setOnResultListener(new RemoteTunnel.OnResultListener() {
                 @Override
                 public void onResult(int id, String result) {
                     // TODO Auto-generated method stub
-                    Toast.show(mActiviy.getApplicationContext(), result);
+                    Toast.show(getApplicationContext(), result);
                     if (result.equals("CONNECT_TIMEOUT") ||
                             result.equals("NTCS_CLOSED") ||
                             result.equals("NTCS_UNKNOWN") ||
@@ -901,14 +976,15 @@ public class VideoPlay_import_class{
                             _remoteTunnel1 = null;
                         }
                         Stop();
-                        mActiviy.finish();
+                        finish();
                         Intent intent=new Intent();
-                        intent.setClass(mActiviy,DeviceConnectFailed.class);
-                        mActiviy.startActivity(intent);
+                        intent.setClass(VideoPlay_temporary_use.this,DeviceConnectFailed.class);
+                        startActivity(intent);
                     } else {
                         PlayVideo();
                         _audioRemoteConnect();
                         Log.e("_devicePort==>",""+_devicePort);
+                        _player.setViewSize(_viewHeight,_viewWidth);
                     }
                 }
             });
@@ -928,13 +1004,13 @@ public class VideoPlay_import_class{
     private RemoteTunnel _remoteTunnel=null;
     void _audioRemoteConnect(){
         if(_remoteTunnel==null)
-            _remoteTunnel=new RemoteTunnel(mActiviy.getApplicationContext());
+            _remoteTunnel=new RemoteTunnel(getApplicationContext());
         _remoteTunnel.openTunnel(0, 80, 3333, _deviceId);
         _remoteTunnel.setOnResultListener(new RemoteTunnel.OnResultListener() {
             @Override
             public void onResult(int id, String result) {
                 // TODO Auto-generated method stub
-                Toast.show(mActiviy.getApplicationContext(), result);
+                Toast.show(getApplicationContext(), result);
                 if (result.equals("CONNECT_TIMEOUT") ||
                         result.equals("NTCS_CLOSED") ||
                         result.equals("NTCS_UNKNOWN") ||
@@ -991,11 +1067,11 @@ public class VideoPlay_import_class{
         @Override
         public void onClick(View v) {
             if(_deviceIp.equals("127.0.0.1")){
-                _videoPipe.setText(mActiviy.getString(R.string.video_BD));
+                _videoPipe.setText(getString(R.string.video_BD));
                 _player.setImageSize(320,240);
                 if(_isLx520){
                     if((_pipe==Enums.Pipe.H264_SECONDARY)||(_pipe== Enums.Pipe.MJPEG_PRIMARY)){
-                        Toast.show(mContext,mActiviy.getApplication().getString(R.string.video_BD_ok));
+                        Toast.show(_self,getApplication().getString(R.string.video_BD_ok));
                         return;
                     }
                     _videoChangePipe.setVisibility(View.GONE);
@@ -1015,11 +1091,11 @@ public class VideoPlay_import_class{
 
             }
             else{
-                _videoPipe.setText(mActiviy.getString(R.string.video_HD));
+                _videoPipe.setText(getString(R.string.video_HD));
                 _player.setImageSize(1280,720);
                 if(_isLx520){
                     if((_pipe==Enums.Pipe.H264_PRIMARY)||(_pipe== Enums.Pipe.MJPEG_PRIMARY)){
-                        Toast.show(mContext,mActiviy.getApplication().getString(R.string.video_HD_ok));
+                        Toast.show(_self,getApplication().getString(R.string.video_HD_ok));
                         return;
                     }
                     _videoChangePipe.setVisibility(View.GONE);
@@ -1046,14 +1122,14 @@ public class VideoPlay_import_class{
     View.OnClickListener _videoVHD_Click = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            _videoPipe.setText(mActiviy.getString(R.string.video_VHD));
+            _videoPipe.setText(getString(R.string.video_VHD));
             if(_isLx520){
 
             }
             else{
                 _player.setImageSize(1920,1080);
                 if(_pipe_not_520.equals("3")){
-                    Toast.show(mContext, mActiviy.getApplication().getString(R.string.video_VHD_ok));
+                    Toast.show(_self, getApplication().getString(R.string.video_VHD_ok));
                 }
                 _videoChangePipe.setVisibility(View.GONE);
                 _videoConnectLayout.setVisibility(View.VISIBLE);
@@ -1071,11 +1147,11 @@ public class VideoPlay_import_class{
     View.OnClickListener _videoHD_Click = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            _videoPipe.setText(mActiviy.getString(R.string.video_HD));
+            _videoPipe.setText(getString(R.string.video_HD));
             _player.setImageSize(1280,720);
             if(_isLx520){
                 if((_pipe==Enums.Pipe.H264_PRIMARY)||(_pipe== Enums.Pipe.MJPEG_PRIMARY)){
-                    Toast.show(mContext, mActiviy.getApplication().getString(R.string.video_HD_ok));
+                    Toast.show(_self, getApplication().getString(R.string.video_HD_ok));
                     return;
                 }
                 _videoChangePipe.setVisibility(View.GONE);
@@ -1091,7 +1167,7 @@ public class VideoPlay_import_class{
             }
             else{
                 if(_pipe_not_520.equals("2")){
-                    Toast.show(mContext, mActiviy.getApplication().getString(R.string.video_HD_ok));
+                    Toast.show(_self, getApplication().getString(R.string.video_HD_ok));
                 }
                 _videoChangePipe.setVisibility(View.GONE);
                 _videoConnectLayout.setVisibility(View.VISIBLE);
@@ -1108,11 +1184,11 @@ public class VideoPlay_import_class{
     View.OnClickListener _videoBD_Click = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            _videoPipe.setText(mActiviy.getString(R.string.video_BD));
+            _videoPipe.setText(getString(R.string.video_BD));
             _player.setImageSize(320,240);
             if(_isLx520){
                 if((_pipe==Enums.Pipe.H264_SECONDARY)||(_pipe== Enums.Pipe.MJPEG_PRIMARY)){
-                    Toast.show(mContext, mActiviy.getApplication().getString(R.string.video_BD_ok));
+                    Toast.show(_self, getApplication().getString(R.string.video_BD_ok));
                     return;
                 }
                 _videoChangePipe.setVisibility(View.GONE);
@@ -1129,7 +1205,7 @@ public class VideoPlay_import_class{
             }
             else{
                 if(_pipe_not_520.equals("1")){
-                    Toast.show(mContext, mActiviy.getApplication().getString(R.string.video_BD_ok));
+                    Toast.show(_self, getApplication().getString(R.string.video_BD_ok));
                 }
                 _videoChangePipe.setVisibility(View.GONE);
                 _videoConnectLayout.setVisibility(View.VISIBLE);
@@ -1165,17 +1241,17 @@ public class VideoPlay_import_class{
         public void onClick(View v) {
             if(photofile_path==null)
             {
-                _requestPermission.requestWriteSettings(mActiviy);
+                _requestPermission.requestWriteSettings(VideoPlay_temporary_use.this);
                 return;
             }
             File file = new File(photofile_path);//获取本地已有视频数量
             if(file==null){
-                _requestPermission.requestWriteSettings(mActiviy);
+                _requestPermission.requestWriteSettings(VideoPlay_temporary_use.this);
                 return;
             }
             File[] filephoto = file.listFiles();
             if(filephoto==null){
-                _requestPermission.requestWriteSettings(mActiviy);
+                _requestPermission.requestWriteSettings(VideoPlay_temporary_use.this);
                 return;
             }
 
@@ -1216,9 +1292,9 @@ public class VideoPlay_import_class{
             {
                 _player.takePhoto().compress(Bitmap.CompressFormat.JPEG, 100, photofile);
                 if(length<10)
-                    Toast.show(mContext, mActiviy.getApplication().getString(R.string.video_take_photo_text) + photofile_path + "/IMG " + "_0" + length + "  " + str + ".jpg");
+                    Toast.show(_self, getApplication().getString(R.string.video_take_photo_text) + photofile_path + "/IMG " + "_0" + length + "  " + str + ".jpg");
                 else
-                    Toast.show(mContext, mActiviy.getApplication().getString(R.string.video_take_photo_text) + photofile_path + "/IMG " + "_" + length + "  " + str + ".jpg");
+                    Toast.show(_self, getApplication().getString(R.string.video_take_photo_text) + photofile_path + "/IMG " + "_" + length + "  " + str + ".jpg");
 
                 try
                 {
@@ -1254,23 +1330,23 @@ public class VideoPlay_import_class{
                 //_btnRecord.setImageResource(R.drawable.videodis);
                 _player.endRecord();
                 _recording = false;
-                Toast.show(mContext,mActiviy.getApplication().getString(R.string.video_record_text) + path);
+                Toast.show(_self,getApplication().getString(R.string.video_record_text) + path);
             }
             else
             {
                 if(videofile_path==null)
                 {
-                    _requestPermission.requestWriteSettings(mActiviy);
+                    _requestPermission.requestWriteSettings(VideoPlay_temporary_use.this);
                     return;
                 }
                 File file = new File(videofile_path);//获取本地已有视频数量
                 if(file==null){
-                    _requestPermission.requestWriteSettings(mActiviy);
+                    _requestPermission.requestWriteSettings(VideoPlay_temporary_use.this);
                     return;
                 }
                 File[] filephoto = file.listFiles();
                 if(filephoto==null){
-                    _requestPermission.requestWriteSettings(mActiviy);
+                    _requestPermission.requestWriteSettings(VideoPlay_temporary_use.this);
                     return;
                 }
 
@@ -1352,23 +1428,12 @@ public class VideoPlay_import_class{
                         public void run()
                         {
                             audiotime++;
-                            /*
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     _videoAudioTime.setText(showTimeCount(audiotime));
                                 }
                             });
-                            */
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    _videoAudioTime.setText(showTimeCount(audiotime));
-                                }
-                            }).start();
-
-
-
                         }
                     };
                     timer.schedule(task, 0, 1000);//每1s发送一次扫描
@@ -1381,17 +1446,17 @@ public class VideoPlay_import_class{
                             {
                                 if(voicefile_path==null)
                                 {
-                                    _requestPermission.requestWriteSettings(mActiviy);
+                                    _requestPermission.requestWriteSettings(VideoPlay_temporary_use.this);
                                     return null;
                                 }
                                 File file = new File(voicefile_path);//获取本地已有视频数量
                                 if(file==null){
-                                    _requestPermission.requestWriteSettings(mActiviy);
+                                    _requestPermission.requestWriteSettings(VideoPlay_temporary_use.this);
                                     return null;
                                 }
                                 File[] filephoto = file.listFiles();
                                 if(filephoto==null){
-                                    _requestPermission.requestWriteSettings(mActiviy);
+                                    _requestPermission.requestWriteSettings(VideoPlay_temporary_use.this);
                                     return null;
                                 }
                                 voicefile=new FileOutputStream(voicefile_path+"/voice.pcm");
@@ -1582,13 +1647,13 @@ public class VideoPlay_import_class{
         @Override
         public void onClick(View v) {
             Intent intent = new Intent();
-            intent.setClass(mActiviy, DeviceUart.class);
+            intent.setClass(_self, DeviceUart.class);
             intent.putExtra("deviceip", _deviceIp);
             if(_isLx520)
                 intent.putExtra("sendport", _voicePort);
             else
                 intent.putExtra("sendport", 1008);
-            mActiviy.startActivity(intent);
+            startActivity(intent);
         }
     };
 
@@ -1600,7 +1665,7 @@ public class VideoPlay_import_class{
         @Override
         public void onClick(View v) {
             Intent intent = new Intent();
-            intent.setClass(mActiviy, DeviceSettings.class);
+            intent.setClass(_self, DeviceSettings.class);
             intent.putExtra("devicename", _deviceName);
             intent.putExtra("deviceid", _deviceId);
             intent.putExtra("deviceip", _deviceIp);
@@ -1608,7 +1673,7 @@ public class VideoPlay_import_class{
             intent.putExtra("voicport", _voicePort);
             intent.putExtra("version", _version);
             intent.putExtra("fps", _fps);
-            mActiviy.startActivity(intent);
+            startActivity(intent);
         }
     };
 
@@ -1618,7 +1683,7 @@ public class VideoPlay_import_class{
     View.OnClickListener _videoConnecttingBack_Click = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            mActiviy.finish();
+            finish();
         }
     };
 
@@ -1629,7 +1694,7 @@ public class VideoPlay_import_class{
         @Override
         public void onClick(View v) {
             Stop();
-            mActiviy.finish();
+            finish();
         }
     };
 
@@ -1643,8 +1708,8 @@ public class VideoPlay_import_class{
 			intent.putExtra("ip", _deviceIp);
             intent.putExtra("psk", _devicePsk);
             intent.putExtra("controlport", _voicePort);
-			intent.setClass(mActiviy,PlayBackFolderListActivity.class);
-            mActiviy.startActivity(intent);
+			intent.setClass(VideoPlay_temporary_use.this,PlayBackFolderListActivity.class);
+			startActivity(intent);
         }
     };
 
@@ -1732,13 +1797,11 @@ public class VideoPlay_import_class{
     /**
      *  Self
      */
-    public static VideoPlay_import_class self() {
+    public static VideoPlay_temporary_use self() {
         return _self;
     }
 
-/*
     private RequestPermission _requestPermission;
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -1755,12 +1818,6 @@ public class VideoPlay_import_class{
             }
         }
     }
-    */
-
-
-
-
-
 }
 
 
