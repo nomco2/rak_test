@@ -18,6 +18,8 @@ import android.media.SoundPool;
 import android.net.TrafficStats;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.PowerManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -202,6 +204,11 @@ public class VideoPlay_temporary_use extends Activity{
     SharedPreferences.Editor location_hold_boolean_editor;
 
 
+    /************** Uart 연결 관련 ************/
+    DeviceUart_import_class deviceUart_import_class;
+    private String previous_Receive_data = "";
+    Receive_data_check receive_data_check; //데이터 받기 쓰레드
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -358,7 +365,7 @@ public class VideoPlay_temporary_use extends Activity{
         middle_down.setOnTouchListener(arrow_button);
         right_down.setOnTouchListener(arrow_button);
 
-        middle.setOnClickListener(floating_buttons);
+        middle.setOnTouchListener(arrow_button);
 
 
 /*************카메라 확대 버튼 **********/
@@ -393,7 +400,59 @@ public class VideoPlay_temporary_use extends Activity{
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //스크린 회전 고정
 //        _videoView.setRotation(90);
 //        _videoView2.setRotation(90);
+
+
+        /******************Uart 연결 관련 *************/
+
+        deviceUart_import_class = new DeviceUart_import_class(this);
+        receive_data_check = new Receive_data_check();
+        receive_data_check.setDaemon(true);
+        receive_data_check.start();
+
+
+
     }
+
+
+
+
+
+    class Receive_data_check extends Thread{
+        @Override
+        public void run() {
+            while(!this.isInterrupted()) {
+                if (previous_Receive_data != deviceUart_import_class.Receive_data) {
+                    previous_Receive_data = deviceUart_import_class.Receive_data;
+                    Message msg = handler.obtainMessage();
+                    msg.what = 100;
+                    handler.sendMessage(msg);
+                    }
+                }
+
+            }
+        }
+
+
+
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 100:
+                    Toast.show(getApplicationContext(), previous_Receive_data);
+                    break;
+            }
+        }
+    };
+
+
+
+
+
+
+
+
 
 
 
@@ -415,6 +474,7 @@ public class VideoPlay_temporary_use extends Activity{
                     switch (v.getId()){
                         case R.id.left_up :
 //                            mSerialConn.motor_contol_command(1);
+                            deviceUart_import_class.send_data_method("123");
                             break;
                         case R.id.middle_up :
 //                            mSerialConn.motor_contol_command(2);
@@ -425,10 +485,6 @@ public class VideoPlay_temporary_use extends Activity{
                         case R.id.left :
 //                            mSerialConn.motor_contol_command(4);
                             break;
-                        //middle is onClicklistener
-//                        case R.id.middle :
-//                            mSerialConn.motor_contol_command(5);
-//                            break;
                         case R.id.right :
 //                            mSerialConn.motor_contol_command(6);
                             break;
@@ -440,6 +496,12 @@ public class VideoPlay_temporary_use extends Activity{
                             break;
                         case R.id.right_down :
 //                            mSerialConn.motor_contol_command(9);
+                            break;
+
+
+                        //기준높이 설정 버튼
+                        case R.id.middle :
+                            Toast.show(getApplicationContext(), deviceUart_import_class.Receive_data);
                             break;
 
                     }
@@ -464,10 +526,6 @@ public class VideoPlay_temporary_use extends Activity{
                         case R.id.left :
 //                            mSerialConn.motor_contol_command(0);
                             break;
-                        //middle is onClicklistener
-//                        case R.id.middle :
-//                            mSerialConn.motor_contol_command(0);
-//                            break;
                         case R.id.right :
 //                            mSerialConn.motor_contol_command(0);
                             break;
@@ -479,6 +537,10 @@ public class VideoPlay_temporary_use extends Activity{
                             break;
                         case R.id.right_down :
 //                            mSerialConn.motor_contol_command(0);
+                            break;
+
+                        //기준높이 설정 버튼
+                        case R.id.middle :
                             break;
 
                     }
@@ -495,6 +557,10 @@ public class VideoPlay_temporary_use extends Activity{
     View.OnClickListener floating_buttons = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            switch (v.getId()){
+//                case R.id.middle :
+
+            }
 
 
         }
@@ -559,6 +625,7 @@ public class VideoPlay_temporary_use extends Activity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        receive_data_check.interrupt(); //데이터 받기 쓰레드 멈춤
     }
 
     @Override
@@ -1818,6 +1885,14 @@ public class VideoPlay_temporary_use extends Activity{
             }
         }
     }
+
+
+    /********Uart 데이터 Receive 하기 위한 함수 호출용***************/
+
+
+
+
+
 }
 
 

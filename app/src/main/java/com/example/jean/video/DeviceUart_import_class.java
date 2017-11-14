@@ -5,10 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.jean.rakvideotest.R;
@@ -22,7 +25,7 @@ import java.net.Socket;
 import java.net.SocketException;
 
 import paintss.common.Toast;
-
+import com.example.jean.video.VideoPlay_temporary_use;
 /**
  * Created by Jean on 2016/1/12.
  */
@@ -49,16 +52,27 @@ public class DeviceUart_import_class{
     private long _sendNum=0;
     private long _recvNum=0;
 
+
+
+    /***************** 설정 데이터 **********************/
     private Context mContext;
+
+//    private TextView mstandard_height, mcomparison_height, mheight_difference;
+    public String Receive_data;
 
     /**
      *
      * @param from_context original context from previous activiy
      */
     public DeviceUart_import_class(Context from_context){
+//                                   TextView standard_height, TextView comparison_height, TextView height_difference,
+//                                   ImageButton ){
 
         mContext = from_context;
-
+        Receive_data = "";
+//        mstandard_height = standard_height;
+//        mcomparison_height = comparison_height;
+//        mheight_difference = height_difference;
 
 
 
@@ -66,12 +80,13 @@ public class DeviceUart_import_class{
 
         //        Intent intent = getIntent();
 //        _deviceIp = intent.getStringExtra("deviceip");
-        _deviceIp = "127.0.0.1";
+        _deviceIp = "192.168.100.1";
 //        _sendPort=intent.getIntExtra("sendport",80);
-        _sendPort = 1008;
+        _sendPort = 80;
         Log.e("_sendPort==>",_sendPort+"");
         if((_deviceIp==null)||(_deviceIp.equals(""))){
 //            Toast.show(this,getString(R.string.video_uart_ip_error));
+            Toast.show(mContext,"IP address error");
             return;
         }
         if(_sendPort==1008){//图传模块
@@ -271,6 +286,63 @@ public class DeviceUart_import_class{
     };
 
 
+
+
+    public void send_data_method(String send_text){
+//        final int sendLen=_videoSendData.length();
+        final int sendLen= send_text.length();
+        final byte[] data = new byte[sendLen+2];//发送数据必须以0x01 0x55开头
+        data[0] = 0x01;
+        data[1] = 0x55;
+//        byte[] sendData=_videoSendData.getText().toString().getBytes();
+        byte[] sendData = send_text.getBytes();
+        System.arraycopy(sendData,0,data,2,sendLen);
+        sendOk=false;
+
+        new AsyncTask<Void, Void, Void>()
+        {
+            protected Void doInBackground(Void... params)
+            {
+                if(_sendPort==1008){
+                    try {
+                        InetAddress serverAddress = InetAddress.getByName(_deviceIp);
+                        DatagramPacket sendPackage = new DatagramPacket(data , data.length , serverAddress , _sendPort);
+                        udp_socket.send(sendPackage);
+                        sendOk=true;
+                    } catch (IOException e) {
+                    }
+                }
+                else{
+                    if (!_socket.isClosed()) {
+                        try {
+                            dataStream.write(data);
+                            sendOk=true;
+                        } catch (IOException e) {
+                        }
+                    }
+                }
+                return null;
+            }
+            @Override
+            protected void onPostExecute(Void result)
+            {
+                if(sendOk){
+                    _sendNum+=sendLen;
+//                    _videoSendNum.setText("Send Bytes: "+_sendNum);
+                }
+                else{
+//                        Toast.show(DeviceUart_import_class.this,getString(R.string.video_uart_connect_failed));
+                    Toast.show(mContext,"video_uart_connect_failed");
+                }
+            }
+        }.execute();
+
+
+    }
+
+
+
+
     /**
      *  Clear Data
      */
@@ -302,7 +374,6 @@ public class DeviceUart_import_class{
             try {
                 _socket = new Socket(_deviceIp, _sendPort);
                 _socket.setKeepAlive(true);
-
                 dataStream =
                         new DataOutputStream(_socket.getOutputStream());
 
@@ -317,14 +388,18 @@ public class DeviceUart_import_class{
                 });
                 */
 
-                new Thread(new Runnable() {
+
+                Handler mHandler = new Handler(Looper.getMainLooper());
+                mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        _videoSendBtn.setEnabled(true);
-//                        Toast.show(DeviceUart_import_class.this,getString(R.string.video_uart_connect_success));
-                        Toast.show(mContext, "video_uart_connect_success");
+//                        _videoSendBtn.setEnabled(true);
+//                        Toast.show(mContext, "video_uart_connect_success");
+                        Log.d("쓰레드 시작", "시작함");
                     }
-                }).start();
+                }, 0);
+
+
 
 
 
@@ -364,12 +439,15 @@ public class DeviceUart_import_class{
                         */
 
 
-                        new Thread(new Runnable() {
+                        Handler mHandler1 = new Handler(Looper.getMainLooper());
+                        mHandler1.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.show(mContext, "video_uart_connect_failed");
+//                                Toast.show(mContext, "video_uart_connect_failed");
+                                Log.d("시작 에러남","에러남");
                             }
-                        }).start();
+                        }, 0);
+
 
 
 
@@ -389,12 +467,20 @@ public class DeviceUart_import_class{
                 */
 
 
-                new Thread(new Runnable() {
+
+
+                Handler mHandler = new Handler(Looper.getMainLooper());
+                mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.show(mContext, "video_uart_connect_failed");
+//                        Toast.show(mContext, "video_uart_connect_failed");
+
+                        Toast.show(mContext, ignored +"");
+
                     }
-                }).start();
+                }, 0);
+
+
 
 
                 ignored.printStackTrace();
@@ -406,6 +492,7 @@ public class DeviceUart_import_class{
      *  TCP Receive Data
      */
     class SocketReceiveRunnable implements Runnable {
+
         private boolean _stop = false;
 
         public void stop() {
@@ -446,9 +533,11 @@ public class DeviceUart_import_class{
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                _videoRecvData.append(str);
-                                _recvNum+=str.length();
-                                _videoRecvNum.setText("Recv Bytes: "+_recvNum);                            }
+//                                _videoRecvData.append(str);
+//                                _recvNum+=str.length();
+//                                _videoRecvNum.setText("Recv Bytes: "+_recvNum);
+                                Receive_data = str;
+                            }
                         }).start();
 
                     }
@@ -457,8 +546,10 @@ public class DeviceUart_import_class{
                 }
             } catch (IOException | InterruptedException ignored) { }
         }
-    }
 
+
+
+    }
 
     /**
      *  UDP Receive Data
@@ -500,13 +591,23 @@ public class DeviceUart_import_class{
                         });
                         */
 
-                        new Thread(new Runnable() {
+
+
+                        Handler mHandler = new Handler(Looper.getMainLooper());
+                        mHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                _videoRecvData.append(str);
-                                _recvNum+=str.length();
-                                _videoRecvNum.setText("Recv Bytes: "+_recvNum);                            }
-                        }).start();
+                            _videoRecvData.append(str);
+                            _recvNum+=str.length();
+                            _videoRecvNum.setText("Recv Bytes: "+_recvNum);
+                                Receive_data = str;
+                            }
+                        }, 0);
+
+
+
+
+
 
 
                     }
@@ -520,7 +621,10 @@ public class DeviceUart_import_class{
                  Log.e("ERROR==>","");
             }
         }
+
     }
+
+
 
     /**
      *  Self
