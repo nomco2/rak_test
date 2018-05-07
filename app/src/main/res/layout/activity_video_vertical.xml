@@ -15,8 +15,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/camera_extension_frame"
-        android:scaleX="0.7"
-        android:scaleY="0.7"
         android:id="@+id/camera_extend_button_area">
 
 
@@ -151,6 +149,7 @@
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="#80000000"
         android:id="@+id/data_viewing_area">
 
 
@@ -377,66 +376,70 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/video_control"
         android:layout_width="fill_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:padding="5dp"
-        android:background="#80000000"
+        android:background="#00000000"
         android:orientation="horizontal">
-        <TextView
-            android:padding="5dp"
-            android:id="@+id/video_pipe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/add_title_height"
-            android:textColor="@color/white"
-            android:layout_gravity="center"
-            android:layout_marginRight="10dp"
-            android:gravity="left"
-            android:text="@string/video_auto"/>
-        <com.example.jean.component.MainMenuButton
-            android:padding="5dp"
-            android:id="@+id/video_voice"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/video_voice_off"
-            android:layout_weight="1"/>
-        <com.example.jean.component.MainMenuButton
-            android:padding="5dp"
-            android:id="@+id/video_take_photo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/video_take_photo"
-            android:layout_weight="1"/>
-        <com.example.jean.component.MainMenuButton
-            android:padding="5dp"
-            android:id="@+id/video_record"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/video_record"
-            android:layout_weight="1"/>
-        <com.example.jean.component.MainMenuButton
-            android:padding="5dp"
-            android:id="@+id/video_audio"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/video_audio"
-            android:layout_weight="1"/>
-        <com.example.jean.component.MainMenuButton
-            android:padding="5dp"
-            android:id="@+id/video_uart"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/video_uart"
-            android:layout_weight="1"/>
-        <com.example.jean.component.MainMenuButton
-            android:padding="5dp"
-            android:id="@+id/video_settings"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/video_settings"
-            android:layout_weight="1"/>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="60dp"
+            android:id="@+id/video_control">
+            <TextView
+                android:padding="5dp"
+                android:id="@+id/video_pipe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/add_title_height"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:layout_marginRight="10dp"
+                android:gravity="left"
+                android:text="@string/video_auto"/>
+            <com.example.jean.component.MainMenuButton
+                android:padding="5dp"
+                android:id="@+id/video_voice"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/video_voice_off"
+                android:layout_weight="1"/>
+            <com.example.jean.component.MainMenuButton
+                android:padding="5dp"
+                android:id="@+id/video_take_photo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/video_take_photo"
+                android:layout_weight="1"/>
+            <com.example.jean.component.MainMenuButton
+                android:padding="5dp"
+                android:id="@+id/video_record"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/video_record"
+                android:layout_weight="1"/>
+            <com.example.jean.component.MainMenuButton
+                android:padding="5dp"
+                android:id="@+id/video_audio"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/video_audio"
+                android:layout_weight="1"/>
+            <com.example.jean.component.MainMenuButton
+                android:padding="5dp"
+                android:id="@+id/video_uart"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/video_uart"
+                android:layout_weight="1"/>
+            <com.example.jean.component.MainMenuButton
+                android:padding="5dp"
+                android:id="@+id/video_settings"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/video_settings"
+                android:layout_weight="1"/>
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -546,4 +549,16 @@
                 />
         </LinearLayout>
 </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="left">
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/titlebar_backbtn_pressed"
+            android:scaleX="0.5"
+            android:scaleY="0.5"
+            android:id="@+id/back_btn"/>
+    </RelativeLayout>
 </RelativeLayout>

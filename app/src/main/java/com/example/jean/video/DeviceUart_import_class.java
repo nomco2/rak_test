@@ -237,11 +237,16 @@ public class DeviceUart_import_class{
     View.OnClickListener _videoSendBtn_Click = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            final int sendLen=_videoSendData.length();
+            //final int sendLen=_videoSendData.length();
+
+            String send_d = "d";
+            final int sendLen=send_d.length();
             final byte[] data = new byte[sendLen+2];//发送数据必须以0x01 0x55开头
             data[0] = 0x01;
             data[1] = 0x55;
-            byte[] sendData=_videoSendData.getText().toString().getBytes();
+//            byte[] sendData=_videoSendData.getText().toString().getBytes();
+            byte[] sendData = send_d.getBytes();
+
             System.arraycopy(sendData,0,data,2,sendLen);
             sendOk=false;
 
@@ -273,8 +278,8 @@ public class DeviceUart_import_class{
                 protected void onPostExecute(Void result)
                 {
                     if(sendOk){
-                        _sendNum+=sendLen;
-                        _videoSendNum.setText("Send Bytes: "+_sendNum);
+//                        _sendNum+=sendLen;
+//                        _videoSendNum.setText("Send Bytes: "+_sendNum);
                     }
                     else{
 //                        Toast.show(DeviceUart_import_class.this,getString(R.string.video_uart_connect_failed));
@@ -513,6 +518,7 @@ public class DeviceUart_import_class{
                             _socket.isConnected() &&
                             !_socket.isInputShutdown()) {
                         size = _socket.getInputStream().read(buffer);
+
                     }
 
                     if (size > 2) {
@@ -632,6 +638,21 @@ public class DeviceUart_import_class{
     public static DeviceUart_import_class self() {
         return _self;
     }
+
+    /**
+     * uart 연결 끊기
+     */
+
+    public void Socket_connection_close(){
+
+        try {
+
+            _socket.close();
+        } catch (IOException e) {
+            Log.e("socket close err", e.toString());
+        }
+    }
+
 }
 
 

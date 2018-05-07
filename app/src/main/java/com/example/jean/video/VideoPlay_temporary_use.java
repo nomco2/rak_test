@@ -21,6 +21,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
+import android.provider.ContactsContract;
+import android.support.v4.app.ActivityCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -165,6 +167,10 @@ public class VideoPlay_temporary_use extends Activity{
     private int is_camera_extended = 0;
     private ViewGroup camera_extend_button_area;
     Movable_Layout_Class camera_extend_button_moving;
+
+    /*****************뒤로가기 버튼 고정 ***************/
+
+    private ImageButton back_btn;
 
     /*************UI 스케일 조정값 저장 ****************/
     SharedPreferences UI_scale_size_value;
@@ -365,7 +371,6 @@ public class VideoPlay_temporary_use extends Activity{
         middle_down.setOnTouchListener(arrow_button);
         right_down.setOnTouchListener(arrow_button);
 
-        middle.setOnTouchListener(arrow_button);
 
 
 /*************카메라 확대 버튼 **********/
@@ -378,6 +383,14 @@ public class VideoPlay_temporary_use extends Activity{
         camera_scale_size_up_btn.setOnClickListener(floating_buttons);
 
 
+        back_btn = (ImageButton) findViewById(R.id.back_btn);
+        back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                VideoPlay_temporary_use.super.onBackPressed();
+                onBackPressed();
+            }
+        });
 
 
 
@@ -397,17 +410,40 @@ public class VideoPlay_temporary_use extends Activity{
 
 
 
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //스크린 회전 고정
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE); //스크린 회전 고정
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        direction_arrow_frame.setRotation(90);
+        camera_extend_button_area.setRotation(90);
+        camera_extend_button_area.setVisibility(View.INVISIBLE);
+        data_viewing_area.setRotation(90);
+        back_btn.setRotation(90);
+
+        _videoTitle.setVisibility(View.INVISIBLE);
+        _videoLayout.setVisibility(View.INVISIBLE);
+        _videoControl.setVisibility(View.INVISIBLE);
+//        _videoView.setScaleX(2);
+//        _videoView.setScaleY(2);
+//        _videoView2.setVisibility(View.VISIBLE);
+//        _player.setViewSize(_viewWidth,_viewHeight);
+//        _layout.setOrientation(LinearLayout.VERTICAL);
+//        _layout.setRotation(90);
+//        _videoView2.setVisibility(View.VISIBLE);
+
+//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //스크린 회전 고정
+
 //        _videoView.setRotation(90);
 //        _videoView2.setRotation(90);
 
 
         /******************Uart 연결 관련 *************/
 
+
         deviceUart_import_class = new DeviceUart_import_class(this);
         receive_data_check = new Receive_data_check();
         receive_data_check.setDaemon(true);
         receive_data_check.start();
+
+        middle.setOnClickListener(deviceUart_import_class._videoSendBtn_Click);
 
 
 
@@ -426,6 +462,7 @@ public class VideoPlay_temporary_use extends Activity{
                     Message msg = handler.obtainMessage();
                     msg.what = 100;
                     handler.sendMessage(msg);
+                    Log.i("receive data", deviceUart_import_class.Receive_data);
                     }
                 }
 
@@ -440,7 +477,9 @@ public class VideoPlay_temporary_use extends Activity{
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 100:
-                    Toast.show(getApplicationContext(), previous_Receive_data);
+//                    Toast.show(getApplicationContext(), previous_Receive_data);
+                    Toast.show(getApplicationContext(), deviceUart_import_class.Receive_data+"");
+
                     break;
             }
         }
@@ -502,6 +541,7 @@ public class VideoPlay_temporary_use extends Activity{
                         //기준높이 설정 버튼
                         case R.id.middle :
                             Toast.show(getApplicationContext(), deviceUart_import_class.Receive_data);
+
                             break;
 
                     }
@@ -620,6 +660,14 @@ public class VideoPlay_temporary_use extends Activity{
         super.onResume();
         Log.e("==>","Resume");
         //CloseFloatView();//关闭悬浮框
+        if(receive_data_check != null){
+//            receive_data_check.interrupt();
+//            receive_data_check = new Receive_data_check();
+//            receive_data_check.setDaemon(true);
+//            receive_data_check.start();
+
+        }
+//        deviceUart_import_class.Socket_connection_close();
     }
 
     @Override
@@ -632,7 +680,13 @@ public class VideoPlay_temporary_use extends Activity{
     public void onBackPressed() {
         Stop();
         finish();
+        ActivityCompat.finishAffinity(this);
+
+
     }
+
+
+
 
     /**
      *  Start Parameters Config Listener
@@ -1786,6 +1840,7 @@ public class VideoPlay_temporary_use extends Activity{
     View.OnClickListener _videoView_Click = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            /*
             if(_videoTitle.getVisibility()==View.VISIBLE){
                 _videoTitle.setVisibility(View.GONE);
                 _videoChangePipe.setVisibility(View.GONE);
@@ -1795,6 +1850,7 @@ public class VideoPlay_temporary_use extends Activity{
                 _videoTitle.setVisibility(View.VISIBLE);
                 _videoControl.setVisibility(View.VISIBLE);
             }
+            */
         }
     };
 
@@ -1829,20 +1885,27 @@ public class VideoPlay_temporary_use extends Activity{
         super.onConfigurationChanged(newConfig);
         if (_videoScreen==1){
             _videoView2.setVisibility(View.GONE);
+
         }
         else{
             _videoView2.setVisibility(View.VISIBLE);
+
         }
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            android.widget.Toast.makeText(getApplicationContext(), "1", android.widget.Toast.LENGTH_SHORT).show();
 
             _player.setViewSize(_viewHeight,_viewWidth);
             _layout.setOrientation(LinearLayout.HORIZONTAL);
+
         } else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            android.widget.Toast.makeText(getApplicationContext(), "2", android.widget.Toast.LENGTH_SHORT).show();
+
             _player.setViewSize(_viewWidth,_viewHeight);
             _layout.setOrientation(LinearLayout.VERTICAL);
         }
     }
     */
+
 
     /**
      * Stop
