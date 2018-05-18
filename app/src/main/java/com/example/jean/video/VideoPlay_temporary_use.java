@@ -51,6 +51,9 @@ import com.example.jean.video.api.SendAudio;
 import com.joystick_and_buttons.Movable_Layout_Class;
 import com.nabto.api.RemoteTunnel;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -443,6 +446,7 @@ public class VideoPlay_temporary_use extends Activity{
         receive_data_check.setDaemon(true);
         receive_data_check.start();
 
+
         middle.setOnClickListener(deviceUart_import_class._videoSendBtn_Click);
 
 
@@ -459,10 +463,30 @@ public class VideoPlay_temporary_use extends Activity{
             while(!this.isInterrupted()) {
                 if (previous_Receive_data != deviceUart_import_class.Receive_data) {
                     previous_Receive_data = deviceUart_import_class.Receive_data;
-                    Message msg = handler.obtainMessage();
-                    msg.what = 100;
-                    handler.sendMessage(msg);
-                    Log.i("receive data", deviceUart_import_class.Receive_data);
+                    try{
+                        JSONArray jarray = new JSONArray(previous_Receive_data);
+                        String distance="";
+                        String Xangle="";
+                        String Yangle="";
+                        String height="";
+                        for(int i=0; i < jarray.length(); i++){
+                            JSONObject jObject = jarray.getJSONObject(i);  // JSONObject 추출
+                            distance= jObject.getString("distance");
+                            Xangle= jObject.getString("Xangle");
+                            Yangle= jObject.getString("Yangle");
+                            height= jObject.getString("height");
+                        }
+
+                        android.widget.Toast.makeText(getApplicationContext(),(distance+Xangle+Yangle+height), android.widget.Toast.LENGTH_LONG).show();
+                        Message msg = handler.obtainMessage();
+                        msg.what = 100;
+                        handler.sendMessage(msg);
+                        Log.i("receive data", deviceUart_import_class.Receive_data);
+                    }catch (Exception e){
+
+                    }
+
+
                     }
                 }
 
@@ -512,35 +536,34 @@ public class VideoPlay_temporary_use extends Activity{
 //                if (mSerialConn != null) { //시리얼 연결됬을때만
                     switch (v.getId()){
                         case R.id.left_up :
-//                            mSerialConn.motor_contol_command(1);
-                            deviceUart_import_class.send_data_method("123");
+                            deviceUart_import_class.send_data_method("m1");
                             break;
                         case R.id.middle_up :
-//                            mSerialConn.motor_contol_command(2);
+                            deviceUart_import_class.send_data_method("m2");
                             break;
                         case R.id.right_up :
-//                            mSerialConn.motor_contol_command(3);
+                            deviceUart_import_class.send_data_method("m3");
                             break;
                         case R.id.left :
-//                            mSerialConn.motor_contol_command(4);
+                            deviceUart_import_class.send_data_method("m4");
                             break;
                         case R.id.right :
-//                            mSerialConn.motor_contol_command(6);
+                            deviceUart_import_class.send_data_method("m6");
                             break;
                         case R.id.left_down :
-//                            mSerialConn.motor_contol_command(7);
+                            deviceUart_import_class.send_data_method("m7");
                             break;
                         case R.id.middle_down :
-//                            mSerialConn.motor_contol_command(8);
+                            deviceUart_import_class.send_data_method("m8");
                             break;
                         case R.id.right_down :
-//                            mSerialConn.motor_contol_command(9);
+                            deviceUart_import_class.send_data_method("m9");
                             break;
 
 
                         //기준높이 설정 버튼
                         case R.id.middle :
-                            Toast.show(getApplicationContext(), deviceUart_import_class.Receive_data);
+//                            Toast.show(getApplicationContext(), deviceUart_import_class.Receive_data);
 
                             break;
 
@@ -551,6 +574,7 @@ public class VideoPlay_temporary_use extends Activity{
 
             /* 방향 버튼 뗄 때 */
             if(action == MotionEvent.ACTION_UP) {
+                deviceUart_import_class.send_data_method("m0");
 
                     switch (v.getId()){
                         case R.id.left_up :
@@ -674,6 +698,8 @@ public class VideoPlay_temporary_use extends Activity{
     protected void onDestroy() {
         super.onDestroy();
         receive_data_check.interrupt(); //데이터 받기 쓰레드 멈춤
+        deviceUart_import_class.Socket_connection_close();
+
     }
 
     @Override
@@ -681,6 +707,8 @@ public class VideoPlay_temporary_use extends Activity{
         Stop();
         finish();
         ActivityCompat.finishAffinity(this);
+        receive_data_check.interrupt(); //데이터 받기 쓰레드 멈춤
+        deviceUart_import_class.Socket_connection_close();
 
 
     }

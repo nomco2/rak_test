@@ -238,7 +238,6 @@ public class DeviceUart_import_class{
         @Override
         public void onClick(View v) {
             //final int sendLen=_videoSendData.length();
-
             String send_d = "d";
             final int sendLen=send_d.length();
             final byte[] data = new byte[sendLen+2];//发送数据必须以0x01 0x55开头

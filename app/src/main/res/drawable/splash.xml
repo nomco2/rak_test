@@ -4,7 +4,7 @@
 	android:id="@+id/flaganim"
 	android:oneshot="false"
 	>
-	<item android:drawable="@drawable/splash_image" android:duration="1000" />
+	<item android:drawable="@drawable/igeoscan_logo" android:duration="1000" />
 <!--
     <item android:drawable="@drawable/f03" android:duration="100" />
     <item android:drawable="@drawable/f04" android:duration="100" />
