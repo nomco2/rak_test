@@ -451,7 +451,12 @@ public class VideoPlay_temporary_use extends Activity{
 
 
 
-    }
+
+
+
+
+
+    }//oncreate 끝
 
 
 
@@ -464,6 +469,7 @@ public class VideoPlay_temporary_use extends Activity{
                 if (previous_Receive_data != deviceUart_import_class.Receive_data) {
                     previous_Receive_data = deviceUart_import_class.Receive_data;
                     try{
+
                         JSONArray jarray = new JSONArray(previous_Receive_data);
                         String distance="";
                         String Xangle="";

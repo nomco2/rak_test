@@ -16,6 +16,9 @@ import android.widget.ImageView;
 
 import com.example.jean.rakvideotest.R;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.Locale;
 
 public class SplashScreen extends Activity {
@@ -77,6 +80,43 @@ public class SplashScreen extends Activity {
 		};
 
 		mSplashThread.start();
+
+
+		try{
+			String str = "[{'name':'배트맨','distance':43,'Xangle':'고담'},"+
+					"{'name':'슈퍼맨','Xangle':36,'address':'뉴욕'},"+
+					"{'name':'앤트맨','Yangle':25,'height':'10000'}]";
+
+
+
+			JSONArray jarray = new JSONArray(str);
+			String distance="";
+			String Xangle="";
+			String Yangle="";
+			String height="";
+			for(int i=0; i < jarray.length(); i++){
+				JSONObject jObject = jarray.getJSONObject(i);  // JSONObject 추출
+				distance= jObject.getString("distance");
+				Xangle= jObject.getString("Xangle");
+				Yangle= jObject.getString("Yangle");
+				height= jObject.getString("height");
+			}
+
+			android.widget.Toast.makeText(getApplicationContext(),(distance+Xangle+Yangle+height), android.widget.Toast.LENGTH_LONG).show();
+            Log.i("json",distance+Xangle+Yangle+height);
+//            Message msg = handler.obtainMessage();
+//            msg.what = 100;
+//            handler.sendMessage(msg);
+//            Log.i("receive data", deviceUart_import_class.Receive_data);
+		}catch (Exception e){
+			Log.i("json",e+"");
+
+		}
+
+
+
+
+
 	}
 
 	@Override
