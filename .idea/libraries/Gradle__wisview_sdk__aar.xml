@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: wisview.sdk:@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.android/build-cache/2cbe0a778c0392f13e3c794aab8882d114ed4486/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/2cbe0a778c0392f13e3c794aab8882d114ed4486/output/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

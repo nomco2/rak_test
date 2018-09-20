@@ -2,95 +2,121 @@
 <items version="2" >
 
     <item
-        jar="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\exploded-aar\com.android.support\support-v4\25.3.1\jars\classes.jar"
+        is-multidex="false"
+        jar="C:\Users\nomco\.android\build-cache\c8bb7345f175cf638c054f09357d14fecc5eec5a\output\jars\classes.jar"
         jumboMode="false"
-        revision="25.0.3"
-        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
-        <dex dex="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\pre-dexed\debug\classes-b2c9b1d3128c0bc36c952351f624892400e92ca0.jar" />
-    </item>
-    <item
-        jar="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\25.3.1\jars\classes.jar"
-        jumboMode="false"
-        revision="25.0.3"
-        sha1="6ef31f1555bb4cc513ec8d52711365a8b89f3600">
-        <dex dex="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\pre-dexed\debug\classes-10e0a6aca34cb13eef06168ce000168848929d7d.jar" />
-    </item>
-    <item
-        jar="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\25.3.1\jars\classes.jar"
-        jumboMode="false"
-        revision="25.0.3"
-        sha1="150252b33b00274cc868578ade018fda0d43a3eb">
-        <dex dex="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\pre-dexed\debug\classes-9f94554d0d582ecedf3a6395ab28ba3b047447ad.jar" />
-    </item>
-    <item
-        jar="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\25.3.1\jars\classes.jar"
-        jumboMode="false"
-        revision="25.0.3"
-        sha1="052f5f840f21174a3ecf6544130194e2652cbb73">
-        <dex dex="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\pre-dexed\debug\classes-54351f3ac964077ef7dedaaab15031f5b153017b.jar" />
-    </item>
-    <item
-        jar="G:\devProjectGit\RAK_ipcam\Demo1\app\libs\recyclerview-v7-21.0.0-rc1.jar"
-        jumboMode="false"
-        revision="25.0.3"
-        sha1="14d500eeb7128db6c0f9b55f166c42eacf00f3b6">
-        <dex dex="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\pre-dexed\debug\recyclerview-v7-21.0.0-rc1-d58b8ed6ebba28aa6e269a107e09d3c361a7238e.jar" />
-    </item>
-    <item
-        jar="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\exploded-aar\wisview.sdk\jars\classes.jar"
-        jumboMode="false"
-        revision="25.0.3"
-        sha1="eaaee873a9563af616872c2c3add6a627947e17b">
-        <dex dex="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\pre-dexed\debug\classes-217d155dbc7219c602ba47f0f18eb945b91b2199.jar" />
-    </item>
-    <item
-        jar="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\exploded-aar\com.android.support\support-compat\25.3.1\jars\classes.jar"
-        jumboMode="false"
-        revision="25.0.3"
-        sha1="da27a32db6af8954ee8061537c7d476fcb1df46f">
-        <dex dex="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\pre-dexed\debug\classes-96a31535e0273d3707cec8d0d233ddf1448a72ca.jar" />
-    </item>
-    <item
-        jar="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\exploded-aar\com.android.support\support-fragment\25.3.1\jars\classes.jar"
-        jumboMode="false"
-        revision="25.0.3"
-        sha1="4a26a1154d053ab11aaf4c3967c42a4d66390991">
-        <dex dex="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\pre-dexed\debug\classes-4149d5f8280be474a23156b127bb059811f3aa0d.jar" />
-    </item>
-    <item
-        jar="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\25.3.1\jars\classes.jar"
-        jumboMode="false"
-        revision="25.0.3"
-        sha1="47635644d0d5c103c1dd8360549eb9ba3225c7d3">
-        <dex dex="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\pre-dexed\debug\classes-c4d6e0d957c9c892205d0e4f41fac0724a3c3119.jar" />
-    </item>
-    <item
-        jar="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\25.3.1\jars\classes.jar"
-        jumboMode="false"
+        optimize="true"
         revision="25.0.3"
         sha1="45f697922e6f072daa12f8a2995dc77ab03c11da">
-        <dex dex="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\pre-dexed\debug\classes-e04109aa687fcace8442a12d40c81203993c7058.jar" />
+        <dex dex="D:\git\rak_test\app\build\intermediates\pre-dexed\debug\classes_6e865f7389c9e86abf5910cf87be0be2d2aa9e36.jar" />
     </item>
     <item
-        jar="C:\Users\KimFamily\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\25.3.1\support-annotations-25.3.1.jar"
+        is-multidex="false"
+        jar="C:\Users\nomco\.android\build-cache\dba3ae42b73f9ed606e0509156893f30c381b015\output\jars\classes.jar"
         jumboMode="false"
-        revision="25.0.3"
-        sha1="bf8841d29fa39e077730e7a91222c2ce269fa7c9">
-        <dex dex="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\pre-dexed\debug\support-annotations-25.3.1-5841cdce657a96c1fbbd0326d3b54c56c43a0dda.jar" />
-    </item>
-    <item
-        jar="G:\devProjectGit\RAK_ipcam\Demo1\app\libs\jason-all.jar"
-        jumboMode="false"
-        revision="25.0.3"
-        sha1="45ce8390f1dc85719fa7124141b21d2a18e1363e">
-        <dex dex="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\pre-dexed\debug\jason-all-1ed0827f53665defba275325e398323175433d47.jar" />
-    </item>
-    <item
-        jar="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\25.3.1\jars\classes.jar"
-        jumboMode="false"
+        optimize="true"
         revision="25.0.3"
         sha1="efb8cb62d47d157c29d1521daac7eefd4cb881ee">
-        <dex dex="G:\devProjectGit\RAK_ipcam\Demo1\app\build\intermediates\pre-dexed\debug\classes-f5e747bd8b92ae63acd961d93611209b8adc5352.jar" />
+        <dex dex="D:\git\rak_test\app\build\intermediates\pre-dexed\debug\classes_59dd3aef858c5d8d9d7dbaa8ef980600e3caa027.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\nomco\.android\build-cache\ac65a536b1db91e53b4366787f96320231df2839\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="D:\git\rak_test\app\build\intermediates\pre-dexed\debug\classes_e67d8deb626122e72f1a9143ef334ed6109166f2.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\nomco\.android\build-cache\0c54e6738e2c7ddf03f609517ac72fd24dfdff84\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="150252b33b00274cc868578ade018fda0d43a3eb">
+        <dex dex="D:\git\rak_test\app\build\intermediates\pre-dexed\debug\classes_40f8b15709a7c8f35f0c7c8fd613c90928286e3e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\nomco\AppData\Local\Android\Sdk\extras\android\m2repository\com\android\support\support-annotations\25.3.1\support-annotations-25.3.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="bf8841d29fa39e077730e7a91222c2ce269fa7c9">
+        <dex dex="D:\git\rak_test\app\build\intermediates\pre-dexed\debug\support-annotations-25.3.1_e89488efb5ef3ddc3254055dd2ad64f7ad3e2778.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\nomco\.android\build-cache\2cbe0a778c0392f13e3c794aab8882d114ed4486\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="eaaee873a9563af616872c2c3add6a627947e17b">
+        <dex dex="D:\git\rak_test\app\build\intermediates\pre-dexed\debug\classes_aa30a35455b95a8a8a427ade0516fb34d2b85ce6.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\nomco\.android\build-cache\0fe9d817a9d2aef1a9e8af98707e8c53972ff7df\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="4a26a1154d053ab11aaf4c3967c42a4d66390991">
+        <dex dex="D:\git\rak_test\app\build\intermediates\pre-dexed\debug\classes_3a91b89211e1e3a4d624e2153866bb2281eebc1c.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\nomco\.android\build-cache\71e23477128afed3d82fecab4579cdfc7920d3e3\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="da27a32db6af8954ee8061537c7d476fcb1df46f">
+        <dex dex="D:\git\rak_test\app\build\intermediates\pre-dexed\debug\classes_286b1fcea71ec17e940bfcc160ac9764b2feb738.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\git\rak_test\app\libs\recyclerview-v7-21.0.0-rc1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="14d500eeb7128db6c0f9b55f166c42eacf00f3b6">
+        <dex dex="D:\git\rak_test\app\build\intermediates\pre-dexed\debug\recyclerview-v7-21.0.0-rc1_031409b54b3ac3fd23716d2c06fa706d3d340141.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\nomco\.android\build-cache\0064019b1710d2689810d33cd4a2e9b221b9c587\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="6ef31f1555bb4cc513ec8d52711365a8b89f3600">
+        <dex dex="D:\git\rak_test\app\build\intermediates\pre-dexed\debug\classes_7fd7119966d28234a0af276d8a60d1ccd665ea0d.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\git\rak_test\app\libs\jason-all.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="45ce8390f1dc85719fa7124141b21d2a18e1363e">
+        <dex dex="D:\git\rak_test\app\build\intermediates\pre-dexed\debug\jason-all_96a1c1e1163bbda2ff2b95c90ec7816e4c44a9a8.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\nomco\.android\build-cache\c5fa41489bf99119ea9a8f0d2cefebc385c76ad1\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="052f5f840f21174a3ecf6544130194e2652cbb73">
+        <dex dex="D:\git\rak_test\app\build\intermediates\pre-dexed\debug\classes_c0c8b45d69e0d6639951730ec9aca21c78b03a66.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\nomco\.android\build-cache\718abc6e9c606f1d0495c2e9dce4558b2a9aac35\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="47635644d0d5c103c1dd8360549eb9ba3225c7d3">
+        <dex dex="D:\git\rak_test\app\build\intermediates\pre-dexed\debug\classes_3ac8def0d4fb3639b573bab3d53e1004704e5dd9.jar" />
     </item>
 
 </items>
